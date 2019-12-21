@@ -29,7 +29,7 @@ RCT_EXPORT_METHOD(unmask:(NSString *)maskString inputValue:(NSString *)inputValu
     onResult(@[output]);
 }
 
-RCT_EXPORT_METHOD(setMask:(nonnull NSNumber *)reactNode mask:(NSString *)mask) {
+RCT_EXPORT_METHOD(setMask:(nonnull NSNumber *)reactNode mask:(NSString *)mask rightToLeft:(BOOL) rightToLeft) {
     [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTBaseTextInputView *> *viewRegistry ) {
         dispatch_async(dispatch_get_main_queue(), ^{
             RCTBaseTextInputView *view = viewRegistry[reactNode];
@@ -45,6 +45,7 @@ RCT_EXPORT_METHOD(setMask:(nonnull NSNumber *)reactNode mask:(NSString *)mask) {
                 [textView.textInputDelegate textInputDidChange];
             };
             maskedDelegate.primaryMaskFormat = mask;
+            maskedDelegate.rightToLeft = rightToLeft;
             maskedDelegate.listener = textView.delegate;
             masks[key] = maskedDelegate;
             textView.delegate = masks[key];
